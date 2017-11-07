@@ -20,8 +20,9 @@ http = httplib2.Http()
 
 pair_response, pair_content = http.request(pairs_url, 'GET')
 pairs = json.loads(pair_content.decode('utf-8'))
-print(pairs)
+print("Available pair list: ", list(pairs["pairs"].keys()))
 print("Server time :", time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(get_from_dict(pairs, ["server_time"]))))
+
 
 user_input = input("Please enter pair symbol: ")
 data_response, data_content = http.request(url(user_input), 'GET')
