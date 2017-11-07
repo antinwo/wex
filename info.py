@@ -25,10 +25,13 @@ print("Server time :", time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(get_fro
 
 
 user_input = input("Please enter pair symbol: ")
-data_response, data_content = http.request(url(user_input), 'GET')
-data = json.loads(data_content.decode('utf-8'))
+try:
+    data_response, data_content = http.request(url(user_input), 'GET')
+    data = json.loads(data_content.decode('utf-8'))
 
-print("High " + user_input + ": ", get_from_dict(data, [user_input, "high"]))
-print("Low " + user_input + ": ", get_from_dict(data, [user_input, "low"]))
-print("Last " + user_input + ":", get_from_dict(data, [user_input, "last"]))
-print("Updated :", time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(get_from_dict(data, [user_input, "updated"]))))
+    print("High " + user_input + ": ", get_from_dict(data, [user_input, "high"]))
+    print("Low " + user_input + ": ", get_from_dict(data, [user_input, "low"]))
+    print("Last " + user_input + ":", get_from_dict(data, [user_input, "last"]))
+    print("Updated :", time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(get_from_dict(data, [user_input, "updated"]))))
+except KeyError as key_err:
+    print("There's no such pair: ", key_err)
