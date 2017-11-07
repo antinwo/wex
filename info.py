@@ -1,10 +1,8 @@
 import httplib2
 import json
 import operator
+import time
 from functools import reduce
-
-
-# from pprint import pprint
 
 
 def get_from_dict(data_dict, map_list):
@@ -16,13 +14,20 @@ def url(pair):
     return symbol
 
 
-# print(url('btc_usd'))
-
+pairs_url = 'https://wex.nz/api/3/info'
 
 http = httplib2.Http()
-user_input = input("Please enter the symbol: ")
-response, content = http.request(url(user_input), 'GET')
-data = json.loads(content.decode('utf-8'))
 
-#print(data)
-print(get_from_dict(data, [user_input, "last"]))
+pair_response, pair_content = http.request(pairs_url, 'GET')
+pairs = json.loads(pair_content.decode('utf-8'))
+print(pairs)
+print("Server time :", time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(get_from_dict(pairs, ["server_time"]))))
+
+user_input = input("Please enter the symbol: ")
+data_response, data_content = http.request(url(user_input), 'GET')
+data = json.loads(data_content.decode('utf-8'))
+
+
+print("High " + user_input + ": ", get_from_dict(data, [user_input, "high"]))
+print("Low " + user_input + ": ", get_from_dict(data, [user_input, "low"]))
+print("Last " + user_input + ":", get_from_dict(data, [user_input, "last"]))
