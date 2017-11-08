@@ -31,6 +31,7 @@ user_input = input("Please enter pair symbol: ")
 # temp dictionary
 previous_data = {}
 change = Decimal(0)
+percent_change = Decimal(0)
 data_content = False
 while True:
     try:
@@ -51,16 +52,21 @@ while True:
         if user_input in previous_data:
             change = Decimal(
                 get_from_dict(data, [user_input, "last"])) - Decimal(get_from_dict(previous_data, [user_input, "last"]))
+            percent_change = ((Decimal(
+                get_from_dict(
+                    data, [user_input, "last"])) / Decimal(
+                get_from_dict(previous_data, [user_input, "last"])))-1)*100
         else:
             change = Decimal(0)
+            percent_change = Decimal(0)
 
         print("High " + user_input + ": ", get_from_dict(data, [user_input, "high"]))
         print("Low " + user_input + ": ", get_from_dict(data, [user_input, "low"]))
         print("Last " + user_input + ":", get_from_dict(data, [user_input, "last"]))
         print("Updated:",
               time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(get_from_dict(data, [user_input, "updated"]))))
-        print("Aboslute change: ", change.quantize(Decimal('0.01')))
-
+        print("Absolute change: ", change.quantize(Decimal('0.001')))
+        print("Relative change: ", change.quantize(Decimal('0.001')), "%")
         previous_data = data
 
         time.sleep(30)
